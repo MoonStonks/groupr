@@ -1,16 +1,10 @@
 const express = require("express");
-const admin = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json");
+const { getTeams, createTeam, modifyTeam } = require("./models/teams");
+const { createUser, getUsers } = require("./models/users");
+const { addUserToUserTeams } = require("./models/userTeams");
 require("dotenv").config();
 const app = express();
 const port = 5000;
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
-const db = admin.firestore();
-
 app.use(express.json());
 
 app.get("/", async (req, res) => {
@@ -19,11 +13,7 @@ app.get("/", async (req, res) => {
 
 app.get("/users", async (req, res) => {
   try {
-    const snapshot = await db.collection("users").get();
-    const users = [];
-    snapshot.forEach((doc) => {
-      users.push({ id: doc.id, ...doc.data() });
-    });
+    const users = await getUsers();
     res.status(200).send(users);
   } catch (err) {
     res.status(500).send(err);
@@ -32,18 +22,8 @@ app.get("/users", async (req, res) => {
 
 app.post("/users", async (req, res) => {
   try {
-    const { email, firstName, lastName } = req.body;
-    const docRef = await db.collection("users").add({
-      firstName,
-      lastName,
-      email,
-    });
-    const doc = await docRef.get();
-    if (!doc.exists) {
-      throw new Error("Could not create user");
-    } else {
-      res.status(200).send(doc.data());
-    }
+    const userData = await createUser(req.body);
+    res.status(200).send(userData);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -52,34 +32,18 @@ app.post("/users", async (req, res) => {
 // list teams
 app.get("/teams", async (req, res) => {
   try {
-    const snapshot = await db.collection("teams").get();
-    const teams = [];
-    snapshot.forEach((doc) => {
-      teams.push({ id: doc.id, ...doc.data() });
-    });
+    const teams = await getTeams();
     res.status(200).send(teams);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
-// create teams
+// create team
 app.post("/teams", async (req, res) => {
   try {
-    const { name, userId, capacity, eventId } = req.body;
-    const docRef = await db.collection("teams").add({
-      name,
-      createdByUserId: userId,
-      memberIds: [userId],
-      capacity,
-      eventId,
-    });
-    const doc = await docRef.get();
-    if (!doc.exists) {
-      throw new Error("Could not create team");
-    } else {
-      res.status(200).send(doc.data());
-    }
+    const team = await createTeam(req.body);
+    res.status(200).send(team);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -88,27 +52,35 @@ app.post("/teams", async (req, res) => {
 // modify team
 app.patch("/teams/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    const { name, userId, memberIds } = req.body;
-    const ref = db.collection("teams").doc(id);
-    await ref.update({
-      name,
-      createdByUserId: userId,
-      memberIds,
-    });
-    const resultRef = db.collection("teams").doc(id);
-    const doc = await resultRef.get();
-    if (!doc.exists) {
-      throw new Error("Could not update team");
-    } else {
-      res.status(200).send({ id: doc.id, ...doc.data() });
-    }
+    await modifyTeam(req.params.id, req.body);
+    res.status(200).send(team);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
-// delete team
+// modify user <-> team matching
+app.patch("/userteams/:id", async (req, res) => {
+  try {
+    const pairing = await addUserToUserTeams(req.params.id, req.body);
+    res.status(200).send(pairing);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+app.post("/events/register", async (req, res) => {
+
+});
+
+// get all users in an event
+
+// get users by team ID
+
+// create event
+// get all events
+// get event by user ID
+// patch event
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

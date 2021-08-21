@@ -3,9 +3,12 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 // import theme from './theme';
-import { Home } from "./pages/index";
-import { Dashboard } from "./pages/dashboard";
-import { Login } from "./pages/login";
+import Home from "./pages/index";
+import Dashboard from "./pages/dashboard";
+import Login from "./pages/login";
+import Verification from "./pages/verification";
+import Groups from "./pages/groups";
+import GroupFormation from "./pages/group-formation";
 //  import { CalendarPage } from "./pages/CalendarPage";
 //  import { GroupSettings } from "./components/GroupSettings";
 
@@ -15,10 +18,11 @@ export const App = () => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/login"  component={Login} />
-          <Route path="/profile" />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/verify" component={Verification} />
+          <Route exact path="/group-formation" component={GroupFormation} />
           <Route path="/dashboard" component={Dashboard} />
-          <Route path="/:groupId" />
+          <Route path="/:groupId" component={Groups} />
         </Switch>
       </BrowserRouter>
     </ChakraProvider>
@@ -26,24 +30,3 @@ export const App = () => {
 };
 
 export default App;
-
-// function App() {
-//   return (
-//     <ChakraProvider>
-//       <Switch>
-//         <Route exact path='/'>
-
-//         </Route >
-//         <Route exact path='/home'>
-//         </Route >
-//         <Route exact path='/profile'>
-//         </Route >
-//         <Route exact path='/'>
-//         </Route >
-//       Hello World
-//       </Switch>
-//     </ChakraProvider>
-//   );
-// }
-
-// export default App;

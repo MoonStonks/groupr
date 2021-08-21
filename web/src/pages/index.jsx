@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 
-export const Home = () => {
+const Home = () => {
   let history = useHistory();
 
   return (
@@ -13,3 +13,5 @@ export const Home = () => {
     </Box>
   );
 };
+
+export default Home;

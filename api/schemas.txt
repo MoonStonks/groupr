@@ -1,28 +1,29 @@
 User {
-  id: string,
-  firstName: string,
-  lastName: string,
-  email: string
+  id: string,                     x
+  firstName: string,              *
+  lastName: string,               *
+  email: string,                  *
+  skills: Array<string>,          *
+  specialties: Array<string>      *
 }
 
 Team {
-  id: string,
-  name: string,
-  createdByUserId: string,
-  memberIds: Array<string>,
-  capacity: integer,
-  eventId: string
+  id: string,                     x
+  name: string,                   *
+  createdByUserId: string,        *
+  capacity: integer,              ?
+  eventId: string                 *
 }
 
-UserTeams {
-  userId: string,
-  teamId: string or null,
-  eventId: string
+UserTeam {
+  userId: string,                 *
+  teamId: string or null,         ?
+  eventId: string,                *
+  status: boolean,                x
 }
 
 Event {
-  id: string,
-  name: string,
-  inviteCode: string,
-  maxTeamSize: integer
+  id: string,                     x
+  name: string,                   *
+  maxTeamSize: integer            *
 }
