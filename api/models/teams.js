@@ -1,8 +1,7 @@
-const { db, admin } = require("../config/firestore");
+const { db } = require("../config/firestore");
 const { getEventMaxTeamSize } = require("./events");
 const { modifyUserTeam, isUserRegisteredInEvent } = require("./userTeams");
-const { bucketize } = require("../utils/utils");
-const { getUserProfileById } = require("./users");
+const { queryFirestoreWithBuckets } = require("../utils/utils");
 
 const getTeams = async () => {
   const snapshot = await db.collection("Teams").get();
@@ -36,12 +35,20 @@ const createTeam = async ({ name, userId, eventId }) => {
   }
 };
 
-const modifyTeam = async (id, { name, userId }) => {
+const modifyTeam = async (id, { name, createdByUserId }) => {
   const ref = db.collection("Teams").doc(id);
-  await ref.update({
-    name,
-    createdByUserId: userId,
-  });
+  const json = { createdByUserId, name };
+  const filtered = Object.keys(json).reduce((result, curr) => {
+    if (json[curr] === null || json[curr] === undefined) {
+      return result;
+    } else {
+      return {
+        ...result,
+        [curr]: json[curr],
+      };
+    }
+  }, {});
+  await ref.update(filtered);
   const resultRef = db.collection("Teams").doc(id);
   const doc = await resultRef.get();
   if (!doc.exists) {
@@ -53,28 +60,18 @@ const modifyTeam = async (id, { name, userId }) => {
 
 const getTeamsByEventId = async (eventId) => {
   const ref = db.collection("UserTeams").where("eventId", "==", eventId);
-  const docs = await ref.get();
-  const queryResult = [];
-  docs.forEach((doc) => {
-    queryResult.push(doc.data().teamId);
-  });
-  const buckets = bucketize(10, queryResult);
-  const teamsRef = db.collection("Teams");
-  console.log(buckets);
-  const teams = await Promise.all(
-    buckets.map((bucket) => {
-      return teamsRef
-        .where(admin.firestore.FieldPath.documentId(), "in", bucket)
-        .get();
+  const teams = await queryFirestoreWithBuckets(ref, "teamId", "Teams");
+  return await Promise.all(
+    teams.map(async (team) => {
+      const members = await getTeamMembers(team.id);
+      return { ...team, members };
     })
   );
-  const teamsList = [];
-  teams.forEach((querySnapshot) => {
-    querySnapshot.forEach((elem) => {
-      teamsList.push({ id: elem.id, ...elem.data() });
-    });
-  });
-  return teamsList;
+};
+
+const getTeamMembers = async (teamId) => {
+  const ref = db.collection("UserTeams").where("teamId", "==", teamId);
+  return await queryFirestoreWithBuckets(ref, "userId", "Users");
 };
 
 module.exports = {
@@ -82,4 +79,5 @@ module.exports = {
   createTeam,
   modifyTeam,
   getTeamsByEventId,
+  getTeamMembers,
 };

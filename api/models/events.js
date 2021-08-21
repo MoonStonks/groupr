@@ -1,5 +1,5 @@
-const { db, admin } = require("../config/firestore");
-const { bucketize } = require("../utils/utils");
+const { db } = require("../config/firestore");
+const { queryFirestoreWithBuckets } = require("../utils/utils");
 const { addUserToUserTeams } = require("./userTeams");
 
 const getAllEvents = async () => {
@@ -13,27 +13,7 @@ const getAllEvents = async () => {
 
 const getEventsByUserId = async (id) => {
   const ref = db.collection("UserTeams").where("userId", "==", id);
-  const docs = await ref.get();
-  const eventIds = [];
-  docs.forEach((doc) => {
-    eventIds.push(doc.data().eventId);
-  });
-  const buckets = bucketize(10, eventIds);
-  const eventsRef = db.collection("Events");
-  const events = await Promise.all(
-    buckets.map((bucket) => {
-      return eventsRef
-        .where(admin.firestore.FieldPath.documentId(), "in", bucket)
-        .get();
-    })
-  );
-  const eventList = [];
-  events.flat(Infinity).forEach((querySnapshot) => {
-    querySnapshot.forEach((elem) => {
-      eventList.push({ id: elem.id, ...elem.data() });
-    });
-  });
-  return eventList;
+  return await queryFirestoreWithBuckets(ref, "eventId", "Events");
 };
 
 const createEvent = async ({ name, maxTeamSize }) => {

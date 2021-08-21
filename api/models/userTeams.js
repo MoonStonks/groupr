@@ -14,7 +14,7 @@ const addUserToUserTeams = async ({ userId, eventId }) => {
   }
 };
 
-const modifyUserTeam = async (userId, { teamId, eventId }) => {
+const modifyUserTeam = async ({ userId, teamId, eventId, createdByUserId }) => {
   const ref = db
     .collection("UserTeams")
     .where("eventId", "==", eventId)

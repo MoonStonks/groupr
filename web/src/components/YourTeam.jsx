@@ -44,6 +44,7 @@ import {
   GrLinkedin,
 } from "react-icons/gr";
 import { FaWhatsapp } from "react-icons/fa";
+import { MdAdd } from "react-icons/md";
 
 /**
  * This component is for a user info box containing user info such as
@@ -137,8 +138,10 @@ const teamMembers = [
 export default function YourTeam() {
   return (
     <Box>
-      <Heading color="white">Team Bonanza</Heading>
-      <SimpleGrid columns={1} gridRowGap="30px" mt="45px">
+      <Heading color="white" fontFamily="Roboto" fontSize="80px">
+        Team Bonanza
+      </Heading>
+      <SimpleGrid columns={{ lg: 2, base: 1 }} gridGap="20px" mt="45px">
         {teamMembers.map((member) => (
           <MemberCard member={member} />
         ))}
@@ -151,35 +154,38 @@ const MemberCard = chakra(function ({ member, className }) {
   return (
     <Box backgroundColor="white" rounded="5px">
       <Box p="15px">
-        <HStack h="80px" spacing="20px" borderBottom="1px solid black">
-          <Avatar
-            name="Dan Abrahmov"
-            src="https://bit.ly/dan-abramov"
-            boxSize="50px"
-          />
-          <Heading size="sm">
-            {member.firstName} {member.lastName}
-          </Heading>
-          <Icon />
-          <Tag>
-            <TagLeftIcon as={BsTagFill} />
-            {member.role}
-          </Tag>
-          <HStack spacing="8px">
-            <GrTwitter />
-            <GrFacebook />
-            <GrInstagram />
-            <GrGithub />
-            <GrLinkedin />
-            <FaWhatsapp />
-          </HStack>
-        </HStack>
-        <HStack alignItems="flex-start">
+        <Box borderBottom="1px solid black">
+          <SimpleGrid columns={2}>
+            <HStack h="72px" spacing="20px">
+              <Avatar
+                name="Dan Abrahmov"
+                src="https://bit.ly/dan-abramov"
+                boxSize="50px"
+              />
+              <Heading size="sm">
+                {member.firstName} {member.lastName}
+              </Heading>
+              <Tag>
+                <TagLeftIcon as={BsTagFill} />
+                {member.role}
+              </Tag>
+            </HStack>
+            <HStack spacing="8px">
+              <GrTwitter />
+              <GrFacebook />
+              <GrInstagram />
+              <GrGithub />
+              <GrLinkedin />
+              <FaWhatsapp />
+            </HStack>
+          </SimpleGrid>
+        </Box>
+        <SimpleGrid columns={2} alignItems="flex-start" mt="10px">
           <Box>
             <Heading size="sm" fontFamily="Roboto">
               SKILLS
             </Heading>
-            <HStack spacing="5px">
+            <HStack spacing="5px" mt="5px">
               {member.skills.map((skill) => (
                 <Tag
                   size="md"
@@ -199,7 +205,7 @@ const MemberCard = chakra(function ({ member, className }) {
             <Heading size="sm" fontFamily="Roboto">
               INTERESTS
             </Heading>
-            <HStack spacing="5px">
+            <HStack spacing="5px" mt="5px">
               {member.interests.map((interest) => (
                 <Tag
                   size="md"
@@ -214,14 +220,13 @@ const MemberCard = chakra(function ({ member, className }) {
               ))}
             </HStack>
           </Box>
-
-          <Box maxW="470px">
-            <Heading size="sm" fontFamily="Roboto">
-              BIO
-            </Heading>
-            <Text color="black">{member.userBio}</Text>
-          </Box>
-        </HStack>
+        </SimpleGrid>
+        <Box mt="15px">
+          <Heading size="sm" fontFamily="Roboto">
+            BIO
+          </Heading>
+          <Text color="black">{member.userBio}</Text>
+        </Box>
       </Box>
     </Box>
   );

@@ -109,25 +109,46 @@ const GroupFormation = () => {
           </Circle>
           <Box mt="20px" h="2px" w="60px" bg="#BDADAD" />
         </Box>
-        {events.map((event) => (
-          <Tooltip
-            label={event.name}
-            aria-label={`${event.name} tooltip`}
-            placement="right"
-          >
-            <Flex justifyContent="flex-start" w="100%">
-              <Box
-                bg="green.600"
-                h="100%"
-                w="10px"
-                rounded="5px"
-                mr="10px"
-                visibility={selectedEvent === event.id ? "visible" : "hidden"}
-              />
-              <Circle size="60px" bg={event.avatarURL} />
-            </Flex>
-          </Tooltip>
-        ))}
+
+        <Box
+          w="100%"
+          overflowY="auto"
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-track": {
+              background: "#3B3E3E",
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#9BA09F",
+              opacity: "12",
+              borderRadius: "24px",
+            },
+          }}
+        >
+          {events.map((event) => (
+            <Tooltip
+              label={event.name}
+              aria-label={`${event.name} tooltip`}
+              placement="right"
+            >
+              <Flex justifyContent="flex-start" w="100%" mb="5px">
+                <Box
+                  bg="green.600"
+                  h="100%"
+                  w="10px"
+                  rounded="5px"
+                  mr="10px"
+                  visibility={selectedEvent === event.id ? "visible" : "hidden"}
+                />
+                <Circle size="60px" bg={event.avatarURL} />
+              </Flex>
+            </Tooltip>
+          ))}
+        </Box>
+
         <Spacer />
         <VStack>
           <Circle size="60px" bg="#1F523A">

@@ -10,6 +10,7 @@ const {
   createTeam,
   modifyTeam,
   getTeamsByEventId,
+  getTeamMembers,
 } = require("./models/teams");
 const { createUser, getUsers, getUserProfile } = require("./models/users");
 const { modifyUserTeam } = require("./models/userTeams");
@@ -92,7 +93,7 @@ app.post("/teams", async (req, res) => {
  */
 app.patch("/teams/:teamid", async (req, res) => {
   try {
-    await modifyTeam(req.params.teamid, req.body);
+    const team = await modifyTeam(req.params.teamid, req.body);
     res.status(200).send(team);
   } catch (err) {
     res.status(500).send(err.message);
@@ -109,15 +110,27 @@ app.get("/teams/:eventid", async (req, res) => {
   }
 });
 
+// GET: Teams by event ID
+app.get("/teams/:teamid/members", async (req, res) => {
+  try {
+    const members = await getTeamMembers(req.params.teamid);
+    res.status(200).send(members);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 /**
- * PATCH: Add/remove user from team
+ * PATCH: Add/remove user from team 
+ * (this does NOT modify the Team. See /teams patch route above)
  *
+ * userId: string
  * eventId: string
  * teamId: string
  */
-app.patch("/userteams/modify/:userid", async (req, res) => {
+app.patch("/userteams/modify", async (req, res) => {
   try {
-    const pairing = await modifyUserTeam(req.params.userid, req.body);
+    const pairing = await modifyUserTeam(req.body);
     res.status(200).send(pairing);
   } catch (err) {
     res.status(500).send(err.message);
