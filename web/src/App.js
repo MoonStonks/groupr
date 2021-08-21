@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 // import theme from './theme';
 import { Home } from "./pages/index";
 import { Dashboard } from "./pages/dashboard";
+import { Login } from "./pages/login";
 //  import { CalendarPage } from "./pages/CalendarPage";
 //  import { GroupSettings } from "./components/GroupSettings";
 
@@ -14,7 +15,7 @@ export const App = () => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route path="/login" />
+          <Route path="/login"  component={Login} />
           <Route path="/profile" />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/:groupId" />

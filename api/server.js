@@ -38,16 +38,50 @@ app.get("/users", async (req, res) => {
 app.post("/users", jsonParser, async (req, res) => {
   try {
     const { email, firstName, lastName } = req.body;
-    const docRef = db.collection("users").doc(email);
-    await docRef.set({
-      first: firstName,
-      last: lastName,
+    const docRef = await db.collection("users").add({
+      firstName,
+      lastName,
       email,
     });
-    const userRef = db.collection("users").doc(email);
-    const doc = await userRef.get();
+    const doc = await docRef.get();
     if (!doc.exists) {
       throw new Error("Could not create user");
+    } else {
+      res.status(200).send(doc.data());
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+// list teams
+app.get("/teams", async (req, res) => {
+  try {
+    const snapshot = await db.collection("teams").get();
+    const users = [];
+    snapshot.forEach((doc) => {
+      users.push(doc.data());
+    });
+    res.status(200).send(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+// list teams
+app.post("/teams", async (req, res) => {
+  try {
+    const { name, createdByUserId, memberIds, capacity, eventId } = req.body;
+    const docRef = await db.collection("teams").add({
+      name,
+      createdByUserId,
+      memberIds,
+      capacity,
+      eventId,
+    });
+    const doc = await docRef.get();
+    if (!doc.exists) {
+      throw new Error("Could not create team");
     } else {
       res.status(200).send(doc.data());
     }

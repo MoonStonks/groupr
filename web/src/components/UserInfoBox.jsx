@@ -10,3 +10,4 @@ import { Box, Icon, Image, VStack } from "@chakra-ui/react";
 export default function UserInfoBox({ userInfo }) {
   return <Box></Box>;
 }
+
