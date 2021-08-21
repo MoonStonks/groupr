@@ -56,6 +56,11 @@ app.post("/users", jsonParser, async (req, res) => {
   }
 });
 
+// create teams
+// list teams
+// delete teams
+// modify team
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
