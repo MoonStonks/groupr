@@ -1,7 +1,12 @@
 const express = require("express");
+const {
+  createEvent,
+  getAllEvents,
+  registerUserInEvent,
+} = require("./models/events");
 const { getTeams, createTeam, modifyTeam } = require("./models/teams");
 const { createUser, getUsers } = require("./models/users");
-const { addUserToUserTeams } = require("./models/userTeams");
+const { modifyUserTeam } = require("./models/userTeams");
 require("dotenv").config();
 const app = express();
 const port = 5000;
@@ -62,25 +67,47 @@ app.patch("/teams/:id", async (req, res) => {
 // modify user <-> team matching
 app.patch("/userteams/:id", async (req, res) => {
   try {
-    const pairing = await addUserToUserTeams(req.params.id, req.body);
+    const pairing = await modifyUserTeam(req.body);
     res.status(200).send(pairing);
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
-app.post("/events/register", async (req, res) => {
-
+// get all events
+app.get("/events", async (req, res) => {
+  try {
+    const events = await getAllEvents();
+    res.status(200).send(events);
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
-// get all users in an event
-
-// get users by team ID
+// get all events matching user ID
+app.get("/events/:userid", async (req, res) => {
+  
+});
 
 // create event
-// get all events
-// get event by user ID
-// patch event
+app.post("/events/create", async (req, res) => {
+  try {
+    const event = await createEvent(req.body);
+    res.status(200).send(event);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+// add user to event
+app.post("/events/register", async (req, res) => {
+  try {
+    const event = await registerUserInEvent(req.body);
+    res.status(200).send(event);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

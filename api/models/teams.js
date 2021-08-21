@@ -1,6 +1,6 @@
 const { db } = require("../config/firestore");
-const { getEventGroupCapacity } = require("./events");
-const { addUserToUserTeams } = require("./userTeams");
+const { getEventMaxTeamSize } = require("./events");
+const { modifyUserTeam } = require("./userTeams");
 
 const getTeams = async () => {
   const snapshot = await db.collection("Teams").get();
@@ -16,15 +16,14 @@ const createTeam = async (body) => {
   const docRef = await db.collection("Teams").add({
     name,
     createdByUserId: userId,
-    capacity: await getEventGroupCapacity(eventId),
+    capacity: await getEventMaxTeamSize(eventId),
     eventId,
   });
   const doc = await docRef.get();
-  await addUserToUserTeams({
+  await modifyUserTeam({
     userId: userId,
     teamId: doc.id,
     eventId: eventId,
-    status: true,
   });
   if (!doc.exists) {
     throw new Error("Could not create team");

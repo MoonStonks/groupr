@@ -1,13 +1,11 @@
 const { db } = require("../config/firestore");
 
 const addUserToUserTeams = async (body) => {
-  const { userId, teamId, eventId, status } = body;
-  console.log({ userId, teamId, eventId, status });
+  const { userId, eventId } = body;
   const docRef = await db.collection("UserTeams").add({
     userId,
-    teamId,
+    teamId: null,
     eventId,
-    status,
   });
   const doc = await docRef.get();
   if (!doc.exists) {
@@ -17,27 +15,26 @@ const addUserToUserTeams = async (body) => {
   }
 };
 
-const modifyUserTeam = async (id, body) => {
-  const { userId, teamId, eventId, status } = body;
-  const bodyValues = { userId, teamId, eventId, status };
-  const toUpdate = Object.keys(bodyValues).reduce((result, curr) => {
-    if (bodyValues[curr] === undefined) {
-      return result;
-    } else {
-      return {
-        ...result,
-        [curr]: bodyValues[curr],
-      };
-    }
-  }, {});
-  const ref = db.collection("UserTeams").doc(id);
-  await ref.update({ ...toUpdate });
-  const resultRef = db.collection("UserTeams").doc(id);
-  const doc = await resultRef.get();
-  if (!doc.exists) {
+const modifyUserTeam = async (body) => {
+  const { userId, teamId, eventId } = body;
+  const ref = db
+    .collection("UserTeams")
+    .where("eventId", "==", eventId)
+    .where("userId", "==", userId);
+  const found = [];
+  const doc = await ref.get();
+  doc.forEach((elem) => {
+    found.push(elem);
+  });
+  const [toUpdate] = found;
+  const refToUpdate = db.collection("UserTeams").doc(toUpdate.id);
+  await refToUpdate.update({ teamId });
+  const resultRef = db.collection("UserTeams").doc(toUpdate.id);
+  const res = await resultRef.get();
+  if (!res.exists) {
     throw new Error("Could not update match");
   } else {
-    return { id: doc.id, ...doc.data() };
+    return { id: res.id, ...res.data() };
   }
 };
 

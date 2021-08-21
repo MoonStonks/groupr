@@ -1,5 +1,6 @@
 User {
   id: string,                     x
+  avatarUrl: string               *  
   firstName: string,              *
   lastName: string,               *
   email: string,                  *
@@ -9,6 +10,7 @@ User {
 
 Team {
   id: string,                     x
+  avatarUrl: string               *
   name: string,                   *
   createdByUserId: string,        *
   capacity: integer,              ?
@@ -18,12 +20,12 @@ Team {
 UserTeam {
   userId: string,                 *
   teamId: string or null,         ?
-  eventId: string,                *
-  status: boolean,                x
+  eventId: string                 *
 }
 
 Event {
   id: string,                     x
+  avatarUrl: string               *
   name: string,                   *
   maxTeamSize: integer            *
 }
