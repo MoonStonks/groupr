@@ -59,7 +59,7 @@ const Verification = () => {
         rounded="10px"
       >
         <Box p="30px 32px 45px">
-          <Image h="120%" src={verifyIcon} mx='auto'/>
+          <Image h="120%" src={verifyIcon} mx="auto" />
           <Heading size="md" mt="11px" textAlign="center">
             Verification Code
           </Heading>
@@ -70,14 +70,13 @@ const Verification = () => {
             mt="23px"
             fontFamily="Roboto"
             textAlign="center"
-            
           >
             Protecting your groups is our top priority. Please confirm your
             group membership by entering the authorization code sent to
             ***-***-2283
           </Text>
-          <HStack justifyContent='center' mb="40px">
-            <PinInput >
+          <HStack justifyContent="center" mb="40px">
+            <PinInput>
               <PinInputField />
               <PinInputField />
               <PinInputField />

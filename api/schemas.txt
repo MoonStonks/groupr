@@ -5,7 +5,16 @@ User {
   lastName: string,               *
   email: string,                  *
   skills: Array<string>,          *
-  specialties: Array<string>      *
+  interests: Array<string>,       *
+  role: string,                   *
+  socials: Object<{
+    twitter: string or null,
+    facebook: string or null,
+    whatsapp: string or null,
+    github: string or null,
+    linkedin: string or null
+  }>
+userBio: string,
 }
 
 Team {
@@ -29,3 +38,13 @@ Event {
   name: string,                   *
   maxTeamSize: integer            *
 }
+
+
+Attributes that we need:
+For each team page:
+- userId
+- teamId
+- eventId
+- listOfEvents( user is in)
+- listOfTeams (of the event)
+- individuals present in event

@@ -1,9 +1,11 @@
 {
-    "compilerOptions": {
-      "baseUrl": "./src",
-      "checkJs": true,
-      "jsx": "react"
-    },
-    "exclude": ["node_modules", "dotenv"]
-  }
-  
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "checkJs": true,
+    "jsx": "react"
+  },
+  "exclude": [
+    "node_modules",
+    "dotenv"
+  ]
+}

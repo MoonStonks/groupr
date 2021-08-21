@@ -1,7 +1,6 @@
 const { db } = require("../config/firestore");
 
-const addUserToUserTeams = async (body) => {
-  const { userId, eventId } = body;
+const addUserToUserTeams = async ({ userId, eventId }) => {
   const docRef = await db.collection("UserTeams").add({
     userId,
     teamId: null,
@@ -15,8 +14,7 @@ const addUserToUserTeams = async (body) => {
   }
 };
 
-const modifyUserTeam = async (body) => {
-  const { userId, teamId, eventId } = body;
+const modifyUserTeam = async (userId, { teamId, eventId }) => {
   const ref = db
     .collection("UserTeams")
     .where("eventId", "==", eventId)
@@ -38,7 +36,21 @@ const modifyUserTeam = async (body) => {
   }
 };
 
+const isUserRegisteredInEvent = async (userId, eventId) => {
+  const ref = db
+    .collection("UserTeams")
+    .where("eventId", "==", eventId)
+    .where("userId", "==", userId);
+  const found = [];
+  const doc = await ref.get();
+  doc.forEach((elem) => {
+    found.push(elem);
+  });
+  return found.length;
+};
+
 module.exports = {
   modifyUserTeam,
   addUserToUserTeams,
+  isUserRegisteredInEvent,
 };
