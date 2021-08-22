@@ -1,9 +1,15 @@
 # groupr
+- [Devpost Submission to HackThe6ix](https://devpost.com/software/groupr-mkie5w)
+- [Demo Video](https://www.youtube.com/watch?v=qXr7YNf8dyM)
+
+
+groupr creates a fun team formation experience for users to create, form, and manage their teams, join new events, and meet new people.
+
+
 
 ![](https://i.imgur.com/aGWlUmu.png)
 ![](https://i.imgur.com/J9uN6wh.png)
-- [Devpost Submission to HackThe6ix](https://devpost.com/software/groupr-mkie5w)
-- [Demo Video](https://www.youtube.com/watch?v=qXr7YNf8dyM)
+
 
 
 ## Inspiration
