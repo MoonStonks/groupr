@@ -1,4 +1,4 @@
-const { db } = require("../config/firestore");
+const { db, admin } = require("../config/firestore");
 const {
   queryFirestoreWithBuckets,
   generateRandomString,
@@ -12,6 +12,25 @@ const getAllEvents = async () => {
     users.push({ id: doc.id, ...doc.data() });
   });
   return users;
+};
+
+const getEventByEventId = async (eventId) => {
+  const userRef = db
+    .collection("Events")
+    .where(admin.firestore.FieldPath.documentId(), "==", eventId);
+  const docs = await userRef.get();
+  const queryResult = [];
+  docs.forEach((doc) => {
+    queryResult.push(doc);
+  });
+  const [event] = queryResult;
+  const eventRef = db.collection("Events").doc(event.id);
+  const result = await eventRef.get();
+  if (!result.exists) {
+    throw new Error("Could not find event");
+  } else {
+    return { id: result.id, ...result.data() };
+  }
 };
 
 const getEventsByUserId = async (id) => {
@@ -34,11 +53,17 @@ const createEvent = async ({ name, maxTeamSize, avatarUrl = "" }) => {
   }
 };
 
-const registerUserInEvent = async ({ inviteCode, ...body }) => {
+const registerUserInEvent = async ({ inviteCode, userId }) => {
   const eventRef = await db
     .collection("Events")
     .where("inviteCode", "==", inviteCode);
-  await addUserToUserTeams(body);
+  const docs = await eventRef.get();
+  const queryResult = [];
+  docs.forEach((doc) => {
+    queryResult.push(doc);
+  });
+  const [event] = queryResult;
+  return await addUserToUserTeams({ userId, eventId: event.id });
 };
 
 const getEventMaxTeamSize = async (eventId) => {
@@ -59,4 +84,5 @@ module.exports = {
   registerUserInEvent,
   getEventMaxTeamSize,
   getEventMembers,
+  getEventByEventId,
 };

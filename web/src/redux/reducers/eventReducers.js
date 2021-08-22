@@ -2,10 +2,10 @@
 import {
   CREATING_EVENT,
   CREATING_EVENT_FAILED,
-  FETCHING_EVENTS,
-  SET_USER_EVENTS,
   SET_CURRENT_EVENT,
-  FETCHING_EVENTS_FAILED,
+  FETCHING_EVENT_MEMBERS,
+  SET_EVENT_MEMBERS,
+  FETCHING_EVENT_MEMBERS_FAILED,
 } from "redux/actions/eventActions";
 
 export default (state = {}, action) => {
@@ -18,23 +18,20 @@ export default (state = {}, action) => {
     case SET_CURRENT_EVENT:
       return {
         ...state,
-        currentEvent: action.payload,
+        selectedEvent: action.payload,
       };
-    case FETCHING_EVENTS:
+    case FETCHING_EVENT_MEMBERS:
       return {
         ...state,
-        fetchingEvents: action.payload,
+        fetchingMembers: action.payload,
       };
-    case SET_USER_EVENTS:
+    case SET_EVENT_MEMBERS:
       return {
         ...state,
-        userEvents: action.payload,
+        members: action.payload,
       };
-    case FETCHING_EVENTS_FAILED:
+    case FETCHING_EVENT_MEMBERS_FAILED:
     case CREATING_EVENT_FAILED:
-      return {
-        fetchingFailed: true,
-      };
     default:
       return state;
   }

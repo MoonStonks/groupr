@@ -113,19 +113,20 @@ export default function Scout() {
       <Heading color="white" fontFamily="Roboto" fontSize="80px">
         Scount Individuals
       </Heading>
-      <Filter/>
-      <SimpleGrid columns={1} gridGap="20px" mt="45px">
-        {teamMembers.map((member) => (
-          <MemberCard member={member} />
-        ))}
-      </SimpleGrid>
+      <Flex pt='30px'>
+        <Filter/>
+        <SimpleGrid columns={1} gridGap="20px" mt="45px">
+          {teamMembers.map((member) => (
+            <MemberCard member={member} />
+          ))}
+        </SimpleGrid>
+      </Flex>
     </Box>
   );
 }
 
 const MemberCard = chakra(function ({ member, className }) {
   return (
-
     <Box backgroundColor="white" rounded="5px">
       <Box p="15px">
         <Box borderBottom="1px solid black">
@@ -155,7 +156,7 @@ const MemberCard = chakra(function ({ member, className }) {
               </HStack>
             </SimpleGrid>
             <Flex justifyContent='flex-end'>
-            <Button colorScheme='green' maxW='90px' bg='#6BA709' >
+            <Button colorScheme='yellow' maxW='90px' bg='#F6DEAF' >
               Invite
             </Button>
             </Flex>

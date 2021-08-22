@@ -65,7 +65,7 @@ const skills = [
 
 export default function Filter() {
   return (
-    <Box  h='500px' w = "200px" overflowY="auto"
+    <Box w="300px" overflowY="auto"
     
     css={{
       "&::-webkit-scrollbar": {
@@ -84,14 +84,14 @@ export default function Filter() {
      
     >
       <VStack spacing="5px" alignItems="flex-start">
-        <Heading color="white" fontFamily="Roboto" fontSize="20" mb="12px">
-          Filters
+        <Heading color="white" fontFamily="Roboto" fontSize="25" mb="12px">
+          FILTERS
         </Heading>
 
         <HStack color="white">
-          <BsTagFill />{" "}
+          <BsTagFill />
           <Heading color="white" fontFamily="Roboto" fontSize="16px">
-            Specialties
+          SPECIALITIES
           </Heading>
         </HStack>
         {specialities.map((role) => (
@@ -104,9 +104,9 @@ export default function Filter() {
 
         <Box >
         <HStack color="white" mt='10px'>
-          <BsTagFill />{" "}
+          <BsTagFill />
           <Heading color="white" fontFamily="Roboto" fontSize="16px">
-            Skills
+            SKILLS
           </Heading>
         </HStack>
         </Box>

@@ -28,7 +28,7 @@
 //     <Box h="calc(100vh - 52px)">
 //       <Box bg="white" h="42px" boxShadow="0px 10px 5px #173D2B">
 //         <Heading size="md" ml="18px" pt="9px">
-//           GroupR
+//           groupr
 //         </Heading>
 //       </Box>
 //       <Box zIndex={1}>

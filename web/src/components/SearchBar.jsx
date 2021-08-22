@@ -10,13 +10,13 @@ import { FaSearch } from "react-icons/fa";
 export default chakra(function SearchBar({ className }) {
     return (
       <Box className={className}>
-          <InputGroup>
-          <InputLeftElement
-      pointerEvents="none"
-      children={<FaSearch/>}      
+        <InputGroup>
+        <InputLeftElement
+          pointerEvents="none"
+          children={<FaSearch/>}      
         />
         <Input 
-            maxW='400px'
+            maxW='375px'
             placeholder="Search Team"
             _focus={{bg: 'white'}}
             bg='gray.300'

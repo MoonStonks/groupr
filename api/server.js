@@ -6,6 +6,7 @@ const {
   registerUserInEvent,
   getEventsByUserId,
   getEventMembers,
+  getEventByEventId,
 } = require("./models/events");
 const {
   getTeams,
@@ -33,6 +34,20 @@ app.post("/profile/me", async (req, res) => {
     res.status(200).send(userProfile);
   } catch (err) {
     res.status(500).send(err.message);
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const userProfile = await getUserProfile(req.body);
+    res.status(200).send(userProfile);
+  } catch (err) {
+    try {
+      const newUser = await createUser(req.body);
+      res.status(200).send(newUser);
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   }
 });
 
@@ -68,6 +83,16 @@ app.post("/users", async (req, res) => {
   try {
     const userData = await createUser(req.body);
     res.status(200).send(userData);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+// PATCH: User (same props as above)
+app.patch("/users/:userid", async (req, res) => {
+  try {
+    const user = await getUsers(req.params.userid, req.body);
+    res.status(200).send(user);
   } catch (err) {
     res.status(500).send(err.message);
   }
@@ -136,7 +161,7 @@ app.get("/teams/:teamid/members", async (req, res) => {
 });
 
 /**
- * PATCH: Add/remove user from team 
+ * PATCH: Add/remove user from team
  * (this does NOT modify the Team. See /teams patch route above)
  *
  * userId: string
@@ -162,8 +187,18 @@ app.get("/events", async (req, res) => {
   }
 });
 
+// GET: Events by event ID
+app.get("/events/:eventid", async (req, res) => {
+  try {
+    const events = await getEventByEventId(req.params.eventid);
+    res.status(200).send(events);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 // GET: Events by User ID
-app.get("/events/:userid", async (req, res) => {
+app.get("/users/:userid/events", async (req, res) => {
   try {
     const events = await getEventsByUserId(req.params.userid);
     res.status(200).send(events);
@@ -172,7 +207,7 @@ app.get("/events/:userid", async (req, res) => {
   }
 });
 
-// GET: Events by User ID
+// GET: Event members by event ID
 app.get("/events/:eventid/members", async (req, res) => {
   try {
     const members = await getEventMembers(req.params.eventid);

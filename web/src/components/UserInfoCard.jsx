@@ -47,9 +47,9 @@ import { FaWhatsapp } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import {FiSettings} from "react-icons/fi"
 
-export default chakra(function UserInfoCard({ className, user, bgColor }) {
+export default chakra(function UserInfoCard({ className, user, cardColor }) {
     return (
-    <Box className={className} backgroundColor={bgColor? bgColor :"white"} rounded="5px">
+    <Box className={className} bg={cardColor? "#F6DEAF" : "white" } rounded="5px">
       <Box p="15px">
         <Box borderBottom="1px solid black">
           <SimpleGrid columns={2}>
@@ -88,8 +88,8 @@ export default chakra(function UserInfoCard({ className, user, bgColor }) {
                   size="md"
                   key="md"
                   variant="solid"
-                  bg="#FCA5A5"
-                  color="black"
+                  bg="#521F37"
+                  color="white"
                   fontFamily="HK Grotesk"
                 >
                   {skill}
@@ -108,8 +108,8 @@ export default chakra(function UserInfoCard({ className, user, bgColor }) {
                   size="md"
                   key="md"
                   variant="solid"
-                  bg="#FCA5A5"
-                  color="black"
+                  bg="#521F37"
+                  color="white"
                   fontFamily="HK Grotesk"
                 >
                   {interest}

@@ -1,10 +1,16 @@
 import { baseUrl } from "../../util/constants";
 export const CREATING_EVENT = "@@/USER_ACTIONS/CREATING_EVENTS";
-export const SET_CURRENT_EVENT = "@@/USER_ACTIONS/SET_CURRENT_EVENTS";
-export const CREATING_EVENT_FAILED = "@@/USER_ACTIONS/SET_CURRENT_EVENTS";
-export const FETCHING_EVENTS = "@@/USER_ACTIONS/FETCHING_EVENTS";
-export const SET_USER_EVENTS = "@@/USER_ACTIONS/SET_USER_EVENTS";
-export const FETCHING_EVENTS_FAILED = "@@/USER_ACTIONS/FETCHING_EVENTS_FAILED";
+export const SET_CURRENT_EVENT = "@@/USER_ACTIONS/SET_CURRENT_EVENT";
+export const CREATING_EVENT_FAILED = "@@/USER_ACTIONS/CREATING_EVENT_FAILED";
+export const REGISTER_USER = "@@/USER_ACTIONS/REGISTER_USER";
+export const REGISTER_USER_FAILED = "@@/USER_ACTIONS/REGISTER_USER_FAILED";
+
+export const FETCHING_EVENT_MEMBERS = "@@/USER_ACTIONS/FETCHING_EVENT_MEMBERS";
+export const SET_EVENT_MEMBERS = "@@/USER_ACTIONS/SET_EVENT_MEMBERS";
+export const FETCHING_EVENT_MEMBERS_FAILED =
+  "@@/USER_ACTIONS/FETCHING_EVENT_MEMBERS_FAILED";
+
+export const getEvent = (eventId) => async (dispatch) => {};
 
 export const createEvent = (eventDetails) => async (dispatch) => {
   dispatch({ type: CREATING_EVENT, payload: true });
@@ -26,19 +32,39 @@ export const createEvent = (eventDetails) => async (dispatch) => {
   }
 };
 
-export const getEventsByUserId = (userId) => async (dispatch) => {
-  dispatch({ type: FETCHING_EVENTS, payload: true });
+export const getEventMembers = (eventId) => async (dispatch) => {
+  dispatch({ type: FETCHING_EVENT_MEMBERS, payload: true });
   try {
-    const user = await fetch(`${baseUrl}/events/${userId}`);
+    const user = await fetch(`${baseUrl}/events/${eventId}/members`);
     const json = await user.json();
-    dispatch({ type: SET_USER_EVENTS, payload: json });
+    dispatch({ type: SET_EVENT_MEMBERS, payload: json });
   } catch (err) {
-    dispatch({ type: FETCHING_EVENTS_FAILED, payload: true });
+    dispatch({ type: FETCHING_EVENT_MEMBERS_FAILED, payload: true });
   } finally {
-    dispatch({ type: FETCHING_EVENTS, payload: false });
+    dispatch({ type: FETCHING_EVENT_MEMBERS, payload: false });
   }
 };
 
-export const getEventMembers = (eventId) => async (dispatch) => {
-  
+export const setSelectedEvent = (event) => (dispatch) => {
+  dispatch({ type: SET_CURRENT_EVENT, payload: event });
+};
+
+export const registerMember = (inviteCode, userId) => async (dispatch) => {
+  dispatch({ type: REGISTER_USER, payload: true });
+  try {
+    const event = await fetch(`${baseUrl}/events/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ inviteCode, userId }),
+    });
+    const json = await event.json();
+    dispatch({ type: SET_CURRENT_EVENT, payload: json.eventId });
+  } catch (err) {
+    dispatch({ type: REGISTER_USER_FAILED, payload: true });
+  } finally {
+    dispatch({ type: REGISTER_USER, payload: false });
+  }
 };

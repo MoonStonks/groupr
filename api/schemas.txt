@@ -24,6 +24,7 @@ Team {
   createdByUserId: string,        *
   capacity: integer,              ?
   eventId: string                 *
+  requiredSkills: Array<string>   *
 }
 
 UserTeam {

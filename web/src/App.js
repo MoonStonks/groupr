@@ -1,7 +1,6 @@
 import React from "react";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-
 // import theme from './theme';
 import Home from "./pages/index";
 import Dashboard from "./pages/dashboard";

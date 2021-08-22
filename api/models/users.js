@@ -2,11 +2,19 @@ const { db } = require("../config/firestore");
 
 const createUser = async ({
   email,
-  firstName,
-  lastName,
+  firstName = "",
+  lastName = "",
   skills = [],
   interests = [],
-  avatarUrl = ""
+  avatarUrl = "",
+  socials = {
+    twitter: "",
+    facebook: "",
+    whatsapp: "",
+    github: "",
+    linkedin: "",
+  },
+  userBio = "",
 }) => {
   const docRef = await db.collection("Users").add({
     firstName,
@@ -15,10 +23,47 @@ const createUser = async ({
     skills,
     interests,
     avatarUrl,
+    socials,
+    userBio,
   });
   const doc = await docRef.get();
   if (!doc.exists) {
     throw new Error("Could not create user");
+  } else {
+    return { id: doc.id, ...doc.data() };
+  }
+};
+
+const updateUser = async (
+  id,
+  { email, firstName, lastName, skills, interests, avatarUrl, socials, userBio }
+) => {
+  const json = {
+    email,
+    firstName,
+    lastName,
+    skills,
+    interests,
+    avatarUrl,
+    socials,
+    userBio,
+  };
+  const filtered = Object.keys(json).reduce((result, curr) => {
+    if (json[curr] === null || json[curr] === undefined) {
+      return result;
+    } else {
+      return {
+        ...result,
+        [curr]: json[curr],
+      };
+    }
+  }, {});
+  const ref = db.collection("Users").doc(id);
+  await ref.update(filtered);
+  const resultRef = db.collection("Users").doc(id);
+  const doc = await resultRef.get();
+  if (!doc.exists) {
+    throw new Error("Could not update user");
   } else {
     return { id: doc.id, ...doc.data() };
   }
@@ -73,5 +118,6 @@ module.exports = {
   createUser,
   getUsers,
   getUserProfile,
-  getUserProfileById
+  getUserProfileById,
+  updateUser,
 };

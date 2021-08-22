@@ -139,6 +139,8 @@ const teamMembers = [
 ];
 
 export default function YourTeam() {
+  const [creatorId, setCreatorId] = useState("1");
+
   return (
     <Box>
       <HStack>
@@ -157,9 +159,9 @@ export default function YourTeam() {
           <Icon boxSize="40px" color="gray.200" as={FiSettings} />
         </Button>
       </HStack>
-      <SimpleGrid columns={{ lg: 2, base: 1 }} gridGap="20px" mt="45px">
+      <SimpleGrid columns={{ lg: 2, base: 1 }} gridGap="20px" mt="45px" >
         {teamMembers.map((member) => (
-          <UserInfoCard user={member}/>
+          <UserInfoCard cardColor={member.id === creatorId} user={member}/>
         ))}
       </SimpleGrid>
     </Box>

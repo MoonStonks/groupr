@@ -1,15 +1,20 @@
 /* eslint-disable import/no-anonymous-default-export */
 import {
-  CREATING_USER,
-  CREATING_USER_FAILED,
+  MODIFYING_USER,
+  MODIFYING_USER_FAILED,
   FETCHING_USER,
   FETCHING_USER_FAILED,
   SET_CURRENT_USER,
+  FETCHING_USER_EVENTS,
+  SET_USER_EVENTS,
+  FETCHING_EVENTS_FAILED,
+  LOGGING_IN,
+  LOGGING_IN_FAILED,
 } from "redux/actions/userActions";
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case CREATING_USER:
+    case MODIFYING_USER:
       return {
         ...state,
         creatingUser: action.payload,
@@ -24,15 +29,25 @@ export default (state = {}, action) => {
         ...state,
         fetchingUser: action.payload,
       };
-    case FETCHING_USER_FAILED:
+    case FETCHING_USER_EVENTS:
       return {
         ...state,
-        fetchingFailed: true,
+        fetchingEvents: action.payload,
       };
-    case CREATING_USER_FAILED:
+    case SET_USER_EVENTS:
       return {
-        fetchingFailed: true,
+        ...state,
+        events: action.payload,
       };
+    case LOGGING_IN:
+      return {
+        ...state,
+        loggingIn: action.payload,
+      };
+    case FETCHING_USER_FAILED:
+    case LOGGING_IN_FAILED:
+    case FETCHING_EVENTS_FAILED:
+    case MODIFYING_USER_FAILED:
     default:
       return state;
   }

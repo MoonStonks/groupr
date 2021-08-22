@@ -24,9 +24,9 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
-import { FiPlus, FiSettings } from "react-icons/fi";
+import { FiPlus, FiSettings, FiPower } from "react-icons/fi";
 import { MdPersonOutline } from "react-icons/md";
-
+import {HiLogout} from "react-icons/hi";
 import YourTeam from "../components/YourTeam";
 import FindTeam from "../components/FindTeam";
 import Scout from "../components/Scout";
@@ -99,10 +99,10 @@ const GroupFormation = () => {
 
   return (
     <Flex h="100vh">
-      <VStack w="110px" bg="white">
+      <VStack w="110px" bg="white" >
         <Box>
           <Heading size="sm" textAlign="center" mt="30px">
-            GroupR
+          groupr
           </Heading>
           <Circle size="60px" bg="#D16767" mt="30px">
             <Icon boxSize="40px" color="black" as={MdPersonOutline} />
@@ -143,18 +143,21 @@ const GroupFormation = () => {
                   mr="10px"
                   visibility={selectedEvent === event.id ? "visible" : "hidden"}
                 />
-                <Circle size="60px" bg={event.avatarURL} />
+                <Circle _hover={{cursor: 'pointer'}} size="60px" bg={event.avatarURL} />
               </Flex>
             </Tooltip>
           ))}
         </Box>
 
         <Spacer />
-        <VStack>
+        <VStack >
           <Circle size="60px" bg="#1F523A">
             <Icon color="white" boxSize="40px" as={FiPlus} />
           </Circle>
-          <Box h="30px"></Box>
+          <Circle size="60px" bg="#1F523A">
+            <Icon color="white" boxSize="40px" as={FiPower} />
+          </Circle>
+          <Box h="10px"></Box>
         </VStack>
       </VStack>
       <Box
@@ -175,8 +178,7 @@ const GroupFormation = () => {
           },
         }}
       >
-        <HStack w="100%">
-          <Tabs isLazy ml="20px">
+          <Tabs isLazy ml="20px" w='100%' h="100%" pt='30px' pr='30px'>
             <TabList
               textColor="gray.100"
               maxW="500px"
@@ -199,7 +201,6 @@ const GroupFormation = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
-        </HStack>
       </Box>
     </Flex>
   );

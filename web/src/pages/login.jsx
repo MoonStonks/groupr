@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Center,
@@ -13,6 +13,10 @@ import {
 } from "@chakra-ui/react";
 import googleLogo from "../assets/googlelogo.png";
 import puzzlePiece from "../assets/puzzlepiece.svg";
+import firebase from "../firebase/firebase";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getUserProfile, login } from "redux/actions/userActions";
 
 const style = {
   transform: "rotate(180deg)",
@@ -20,11 +24,42 @@ const style = {
 };
 
 const Login = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(getUserProfile(user.email));
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      history.push("/join");
+    }
+  }, [isLoggedIn, history]);
+
+  const handleLogin = async () => {
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const result = await firebase.auth().signInWithPopup(provider);
+      dispatch(login(result.user.email));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <Box h="calc(100vh - 52px)">
       <Box bg="white" h="42px" boxShadow="0px 10px 5px #173D2B">
         <Heading size="md" ml="18px" pt="9px">
-          GroupR
+          groupr
         </Heading>
       </Box>
       <Box zIndex={1}>
@@ -91,7 +126,12 @@ const Login = () => {
             </Text>
             <Box height="1.5px" bg="black" w="full" />
           </HStack>
-          <Button w="full" borderColor="black" variant="outline">
+          <Button
+            w="full"
+            borderColor="black"
+            variant="outline"
+            onClick={handleLogin}
+          >
             <HStack>
               <Image h="22px" src={googleLogo} />
               <Spacer />
