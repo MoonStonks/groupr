@@ -3,8 +3,7 @@ const { db, admin } = require("../config/firestore");
 const _bucketize = (n, items) => {
   let [i, curr, result] = [0, [], []];
   while (i < items.length) {
-    if (i === n) {
-      i = 0;
+    if (i > 0 && i % n === 0) {
       result.push([...curr]);
       curr = [];
     }

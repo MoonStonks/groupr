@@ -22,89 +22,67 @@ import {
   Tab,
   TabPanel,
   Tooltip,
+  Avatar,
 } from "@chakra-ui/react";
 
-import { FiPlus, FiSettings, FiPower } from "react-icons/fi";
+import { FiPlus, FiSettings, FiPower, FiLogOut } from "react-icons/fi";
 import { MdPersonOutline } from "react-icons/md";
-import {HiLogout} from "react-icons/hi";
+import { HiLogout } from "react-icons/hi";
+import firebase from "../firebase/firebase";
 import YourTeam from "../components/YourTeam";
 import FindTeam from "../components/FindTeam";
 import Scout from "../components/Scout";
-
-const events = [
-  {
-    id: "123",
-    avatarURL: "red.300",
-    name: "Hackathon1",
-    maxTeamSize: 5,
-  },
-  {
-    id: "string",
-    avatarURL: "blue.300",
-    name: "CPSC110 Assignment",
-    maxTeamSize: 4,
-  },
-  {
-    id: "string",
-    avatarURL: "green.300",
-    name: "Math Contest Team",
-    maxTeamSize: 3,
-  },
-  {
-    id: "string",
-    avatarURL: "yellow.400",
-    name: "Case Comp at Google",
-    maxTeamSize: 2,
-  },
-  {
-    id: "string",
-    avatarURL: "gray",
-    name: "Varsity Soccer",
-    maxTeamSize: 4,
-  },
-  {
-    id: "1233",
-    avatarURL: "red.300",
-    name: "Hackathon2",
-    maxTeamSize: 5,
-  },
-  {
-    id: "string",
-    avatarURL: "blue.300",
-    name: "rando Assignment",
-    maxTeamSize: 4,
-  },
-  {
-    id: "string",
-    avatarURL: "green.300",
-    name: "Physics Contest Team",
-    maxTeamSize: 6,
-  },
-  {
-    id: "string",
-    avatarURL: "yellow.400",
-    name: "Case Comp at FAcebook",
-    maxTeamSize: 4,
-  },
-  {
-    id: "string",
-    avatarURL: "gray",
-    name: "Varsity Baseball",
-    maxTeamSize: 30,
-  },
-];
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useDataLoader } from "hooks/useDataLoader";
+import { getEvent } from "redux/actions/eventActions";
 
 const GroupFormation = () => {
-  const [selectedEvent, setSelectedEvent] = useState("123");
+  const {
+    events = [],
+    currentUser,
+    fetchingUser,
+    fetchingEvents,
+    // @ts-ignore
+  } = useSelector((state) => state.users);
+  // @ts-ignore
+  const { selectedEvent } = useSelector((state) => state.events);
+  let history = useHistory();
+  const dataLoader = useDataLoader();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!currentUser && !fetchingUser && !fetchingEvents) {
+      dataLoader();
+    }
+  }, [currentUser, dataLoader, fetchingUser, fetchingEvents]);
+
+  const handleLogout = async () => {
+    await firebase.auth().signOut();
+    history.push("/login");
+  };
 
   return (
     <Flex h="100vh">
-      <VStack w="110px" bg="white" >
+      <VStack w="110px" bg="white">
         <Box>
-          <Heading size="sm" textAlign="center" mt="30px">
-          groupr
+          <Heading
+            size="sm"
+            textAlign="center"
+            mt="30px"
+            onClick={() => history.push(`/`)}
+          >
+            groupr
           </Heading>
-          <Circle size="60px" bg="#D16767" mt="30px">
+          <Circle
+            size="60px"
+            bg="#D16767"
+            mt="30px"
+            transition='0.2s ease'
+            _hover={{cursor: 'pointer', transform: 'scale(1.05)',
+        }}
+            onClick={() => history.push(`/group-formation`)}
+          >
             <Icon boxSize="40px" color="black" as={MdPersonOutline} />
           </Circle>
           <Box mt="20px" h="2px" w="60px" bg="#BDADAD" />
@@ -115,14 +93,16 @@ const GroupFormation = () => {
           overflowY="auto"
           css={{
             "&::-webkit-scrollbar": {
+              visbility: "hidden",
               width: "8px",
             },
             "&::-webkit-scrollbar-track": {
+              visibility: "hidden",
               background: "#3B3E3E",
               width: "8px",
             },
             "&::-webkit-scrollbar-thumb": {
-              background: "#9BA09F",
+              visibility: "hidden",
               opacity: "12",
               borderRadius: "24px",
             },
@@ -134,28 +114,52 @@ const GroupFormation = () => {
               aria-label={`${event.name} tooltip`}
               placement="right"
             >
-              <Flex justifyContent="flex-start" w="100%" mb="5px" >
+              <Flex justifyContent="flex-start" w="100%" mb="5px">
                 <Box
                   bg="green.600"
-                  h="60px"
+                  h="70px"
                   w="10px"
                   rounded="5px"
                   mr="10px"
-                  visibility={selectedEvent === event.id ? "visible" : "hidden"}
+                  visibility={
+                    selectedEvent?.id === event.id ? "visible" : "hidden"
+                  }
                 />
-                <Circle _hover={{cursor: 'pointer'}} size="60px" bg={event.avatarURL} />
+                <Avatar
+                  _hover={{ cursor: "pointer", transform: 'scale(1.05)' }}
+                  transition='0.2s ease'
+                  size="lg"
+                  my='5px'
+                  src={event.avatarUrl}
+                  name={event.name}
+                  onClick={() => {
+                    dispatch(getEvent(event.id));
+                  }}
+                />
               </Flex>
             </Tooltip>
           ))}
         </Box>
 
         <Spacer />
-        <VStack >
-          <Circle size="60px" bg="#1F523A">
-            <Icon color="white" boxSize="40px" as={FiPlus} />
+        <VStack>
+          <Circle size="60px" bg="#1F523A" transition='0.2s ease' _hover={{cursor: 'pointer', transform: 'scale(1.05)', 
+        }}>
+            <Icon
+              color="white"
+              boxSize="40px"
+              as={FiPlus}
+              onClick={() => history.push(`/join`)}
+            />
           </Circle>
-          <Circle size="60px" bg="#1F523A">
-            <Icon color="white" boxSize="40px" as={FiPower} />
+          <Circle size="60px" bg="#1F523A" transition='0.2s ease' _hover={{cursor: 'pointer', transform: 'scale(1.05)',
+        }}>
+            <Icon
+              color="white"
+              boxSize="40px"
+              as={FiLogOut}
+              onClick={handleLogout}
+            />
           </Circle>
           <Box h="10px"></Box>
         </VStack>
@@ -178,29 +182,25 @@ const GroupFormation = () => {
           },
         }}
       >
-          <Tabs isLazy ml="20px" w='100%' h="100%" pt='30px' pr='30px'>
-            <TabList
-              textColor="gray.100"
-              maxW="500px"
-              borderColor="transparent"
-            >
-              <StyledTab>Your Team</StyledTab>
-              <StyledTab>Find a Team</StyledTab>
-              <StyledTab>Scout Individuals</StyledTab>
-            </TabList>
+        <Tabs isLazy ml="20px" w="100%" h="100%" pt="30px" pr="30px">
+          <TabList textColor="gray.100" maxW="600px" borderColor="transparent">
+            <StyledTab>Your Team</StyledTab>
+            <StyledTab>Find a Team</StyledTab>
+            <StyledTab>Scout Individuals</StyledTab>
+          </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                <YourTeam />
-              </TabPanel>
-              <TabPanel>
-                <FindTeam />
-              </TabPanel>
-              <TabPanel>
-                <Scout />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          <TabPanels>
+            <TabPanel>
+              <YourTeam />
+            </TabPanel>
+            <TabPanel>
+              <FindTeam />
+            </TabPanel>
+            <TabPanel>
+              <Scout />
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
       </Box>
     </Flex>
   );
@@ -211,7 +211,11 @@ const StyledTab = chakra(function ({ className, children, isDisabled }) {
     <Tab
       className={className}
       borderBottomColor="transparent"
-      px='30px'
+      w="170px"
+      px="5px"
+      fontFamily="Roboto"
+      fontSize="21px"
+      fontWeight="bold"
       _selected={{
         borderColor: "white",
         textColor: "white",

@@ -6,7 +6,8 @@ import {
   Text,
   Input,
   Button,
-  HStack,VStack,
+  HStack,
+  VStack,
   Image,
   Link,
   Spacer,
@@ -20,21 +21,21 @@ const style = {
   transition: "transform 150ms ease", // smooth transition
 };
 
-
-{/* <Button onClick={() => history.push(`/group-123`)}>
+{
+  /* <Button onClick={() => history.push(`/group-123`)}>
 Navigate to Group
-</Button> */}
+</Button> */
+}
 
 /**
  * Home page. Click on logo to navigate to login
-*/
-
+ */
 
 const Home = () => {
   let history = useHistory();
   return (
     <Box h="calc(100vh - 52px)" mx="auto" textAlign="center">
-<Box zIndex={1}>
+      <Box zIndex={1}>
         <Image
           style={style}
           position="absolute"
@@ -54,28 +55,35 @@ const Home = () => {
           src={puzzlePiece}
         />{" "}
       </Box>
-      
-   
-     <VStack  spacing="1px" mt= " 10%" > <Box zIndex={2}>
-    
-    <Image
-      // position="absolute"
-      // // h="40%"
-      // // ml="39%"
-      // // mt="2%"
-      // mr="50%"
-      
-      src={crownlogo}
-      onClick={() => history.push(`/login`)}
-    />{" "}</Box>
 
-    <Box zIndex={3}>
-      <Box mx='auto'>
-    <Text onClick={() => history.push(`/login`)}  textAlign="center" fontSize="100px" color="white" fontFamily= "Roboto">groupr</Text></Box>
-    </Box>
-    </VStack>
-      
+      <VStack spacing="1px" mt=" 10%">
+        {" "}
+        <Box zIndex={2}>
+          <Image
+            // position="absolute"
+            // // h="40%"
+            // // ml="39%"
+            // // mt="2%"
+            // mr="50%"
 
+            src={crownlogo}
+            onClick={() => history.push(`/login`)}
+          />{" "}
+        </Box>
+        <Box zIndex={3}>
+          <Box mx="auto">
+            <Heading
+              onClick={() => history.push(`/login`)}
+              textAlign="center"
+              fontSize="100px"
+              fontWeight={900}
+              color="white"
+            >
+              groupr
+            </Heading>
+          </Box>
+        </Box>
+      </VStack>
     </Box>
   );
 };

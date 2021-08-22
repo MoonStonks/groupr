@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createEvent, registerMember } from "redux/actions/eventActions";
 import firebase from "../firebase/firebase";
 import { useHistory } from "react-router-dom";
+import { getEventsByUserId } from "redux/actions/userActions";
 
 const style = {
   transform: "rotate(180deg)",
@@ -59,7 +60,7 @@ const JoinEvent = () => {
   });
 
   useEffect(() => {
-    if (events.selectedEvent) {
+    if (events.newEvent) {
       toast({
         title: "Event Created",
         description:
@@ -69,21 +70,23 @@ const JoinEvent = () => {
         isClosable: true,
       });
       setIsEventCreated(true);
-      setEventCode(events.selectedEvent.inviteCode);
+      setEventCode(events.newEvent.inviteCode);
     }
-  }, [events.selectedEvent, toast]);
+  }, [events.newEvent, toast]);
+
+  useEffect(() => {
+    if (events.selectedEvent) {
+      history.push("/group-formation");
+    }
+  }, [events.selectedEvent, history])
 
   const handleSubmit = () => {
     dispatch(createEvent(eventDetails));
   };
 
   const handleJoinEvent = () => {
-    dispatch(registerMember(users.currentUser.id));
-  };
-
-  const handleLogout = async () => {
-    await firebase.auth().signOut();
-    history.push("/login");
+    dispatch(registerMember(userCode, users.currentUser.id));
+    dispatch(getEventsByUserId(users.currentUserId));
   };
 
   return (
@@ -143,7 +146,6 @@ const JoinEvent = () => {
                         fontSize="14px"
                         mb="20px"
                         mt="23px"
-                        fontFamily="Roboto"
                         textAlign="center"
                       >
                         Protecting your events is our top priority. Feel free to
@@ -235,17 +237,18 @@ const JoinEvent = () => {
 
                       <HStack mt="10px" mb="10px" justifyContent="center">
                         <Button
-                          w="42%"
+                          
                           colorScheme="teal"
                           bg="linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), #276749;"
                           rounded="10px"
                           mt="22px"
+                          px='20px'
                           onClick={handleSubmit}
                         >
                           Generate Code
                         </Button>
                       </HStack>
-                      <HStack>
+                      {/* <HStack>
                         <Button
                           w="42%"
                           colorScheme="teal"
@@ -256,7 +259,7 @@ const JoinEvent = () => {
                         >
                           Logout
                         </Button>
-                      </HStack>
+                      </HStack> */}
                     </Box>
                   )}
                 </TabPanel>
@@ -271,7 +274,6 @@ const JoinEvent = () => {
                     fontSize="14px"
                     mb="20px"
                     mt="23px"
-                    fontFamily="Roboto"
                     textAlign="center"
                   >
                     Protecting your events is our top priority. Please confirm

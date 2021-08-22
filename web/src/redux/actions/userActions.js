@@ -44,6 +44,7 @@ export const getUserProfile = (email) => async (dispatch) => {
     });
     const json = await user.json();
     dispatch({ type: SET_CURRENT_USER, payload: json });
+    dispatch(getEventsByUserId(json.id));
   } catch (err) {
     dispatch({ type: FETCHING_USER_FAILED, payload: true });
   } finally {
@@ -73,13 +74,14 @@ export const login = (email) => async (dispatch) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({email}),
+      body: JSON.stringify({ email }),
     });
     const json = await user.json();
     dispatch({ type: SET_CURRENT_USER, payload: json });
+    dispatch(getEventsByUserId(json.id));
   } catch (err) {
     dispatch({ type: LOGGING_IN_FAILED });
   } finally {
-    dispatch({ type: MODIFYING_USER, payload: false });
+    dispatch({ type: LOGGING_IN, payload: false });
   }
 };

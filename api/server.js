@@ -15,7 +15,12 @@ const {
   getTeamsByEventId,
   getTeamMembers,
 } = require("./models/teams");
-const { createUser, getUsers, getUserProfile } = require("./models/users");
+const {
+  createUser,
+  getUsers,
+  getUserProfile,
+  updateUser,
+} = require("./models/users");
 const { modifyUserTeam } = require("./models/userTeams");
 require("dotenv").config();
 const app = express();
@@ -91,7 +96,7 @@ app.post("/users", async (req, res) => {
 // PATCH: User (same props as above)
 app.patch("/users/:userid", async (req, res) => {
   try {
-    const user = await getUsers(req.params.userid, req.body);
+    const user = await updateUser(req.params.userid, req.body);
     res.status(200).send(user);
   } catch (err) {
     res.status(500).send(err.message);
@@ -240,6 +245,7 @@ app.post("/events/create", async (req, res) => {
  * eventId: integer
  */
 app.post("/events/register", async (req, res) => {
+  console.log(req.body)
   try {
     const event = await registerUserInEvent(req.body);
     res.status(200).send(event);

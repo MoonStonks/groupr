@@ -32,6 +32,7 @@ import {
   TagRightIcon,
   TagCloseButton,
   SimpleGrid,
+  useToast,
 } from "@chakra-ui/react";
 import { BsTagFill } from "react-icons/bs";
 import {
@@ -44,7 +45,10 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 
-import Filter from './Filter'
+import Filter from "./Filter";
+import SimpleTag from "./SimpleTag";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedEvent } from "redux/actions/eventActions";
 
 const teamMembers = [
   {
@@ -108,40 +112,44 @@ const teamMembers = [
 ];
 
 export default function Scout() {
+  // @ts-ignore
+  const { members } = useSelector(state => state.events);
+
   return (
     <Box>
-      <Heading color="white" fontFamily="Roboto" fontSize="80px">
-        Scount Individuals
+      <Heading color="white" fontSize="80px">
+        Scout Individuals
       </Heading>
-      <Flex pt='30px'>
-        <Filter/>
-        <SimpleGrid columns={1} gridGap="20px" mt="45px">
-          {teamMembers.map((member) => (
+      <Flex pt="30px" pl="15px">
+        <Filter />
+        <VStack columns={1} gridGap="20px" pt="45px" px="40px" alignItems='center'>
+          {members?.map((member) => (
             <MemberCard member={member} />
           ))}
-        </SimpleGrid>
+        </VStack>
       </Flex>
     </Box>
   );
 }
 
 const MemberCard = chakra(function ({ member, className }) {
+  const toast = useToast();
   return (
-    <Box backgroundColor="white" rounded="5px">
+    <Box backgroundColor="white" rounded="5px" w='100%'>
       <Box p="15px">
         <Box borderBottom="1px solid black">
           <SimpleGrid columns={2}>
             <SimpleGrid columns={2}>
-              <HStack h="72px" >
+              <HStack h="72px">
                 <Avatar
                   name="Dan Abrahmov"
                   src="https://bit.ly/dan-abramov"
                   boxSize="50px"
                 />
-                <Heading size="sm">
+                <Heading size="xs">
                   {member.firstName} {member.lastName}
                 </Heading>
-                <Tag>
+                <Tag fontSize="10px">
                   <TagLeftIcon as={BsTagFill} />
                   {member.role}
                 </Tag>
@@ -155,63 +163,54 @@ const MemberCard = chakra(function ({ member, className }) {
                 <FaWhatsapp />
               </HStack>
             </SimpleGrid>
-            <Flex justifyContent='flex-end'>
-            <Button colorScheme='yellow' maxW='90px' bg='#F6DEAF' >
-              Invite
-            </Button>
+            <Flex justifyContent="flex-end">
+              <Button
+                colorScheme="yellow"
+                maxW="90px"
+                bg="#F6DEAF"
+                onClick={() =>
+                  toast({
+                    title: "Invite Sent",
+                    description: `We've sent ${member.firstName} ${member.lastName} an invite to join your team.`,
+                    status: "success",
+                    duration: 9000,
+                    isClosable: true,
+                  })
+                }
+              >
+                Invite
+              </Button>
             </Flex>
           </SimpleGrid>
         </Box>
         <SimpleGrid columns={2}>
           <SimpleGrid columns={2} alignItems="flex-start" mt="10px">
             <Box>
-              <Heading size="sm" fontFamily="Roboto">
-                SKILLS
-              </Heading>
+              <Heading size="sm">SKILLS</Heading>
               <HStack spacing="5px" mt="5px">
                 {member.skills.map((skill) => (
-                  <Tag
-                    size="md"
-                    key="md"
-                    variant="solid"
-                    bg="#FCA5A5"
-                    color="black"
-                    fontFamily="HK Grotesk"
-                  >
-                    {skill}
-                  </Tag>
+                  <SimpleTag>{skill}</SimpleTag>
                 ))}
               </HStack>
             </Box>
 
             <Box>
-              <Heading size="sm" fontFamily="Roboto">
-                INTERESTS
-              </Heading>
+              <Heading size="sm">INTERESTS</Heading>
               <HStack spacing="5px" mt="5px">
                 {member.interests.map((interest) => (
-                  <Tag
-                    size="md"
-                    key="md"
-                    variant="solid"
-                    bg="#FCA5A5"
-                    color="black"
-                    fontFamily="HK Grotesk"
-                  >
-                    {interest}
-                  </Tag>
+                  <SimpleTag>{interest}</SimpleTag>
                 ))}
               </HStack>
             </Box>
           </SimpleGrid>
           <Box mt="15px">
-            <Heading size="sm" fontFamily="Roboto">
-              BIO
-            </Heading>
-            <Text color="black">{member.userBio}</Text>
+            <Heading size="sm">BIO</Heading>
+            <Text color="black" fontSize="14px">
+              {member.userBio}
+            </Text>
           </Box>
         </SimpleGrid>
       </Box>
     </Box>
-    );
+  );
 });

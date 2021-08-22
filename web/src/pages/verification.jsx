@@ -70,7 +70,6 @@
 //             fontSize="xs"
 //             mb="5px"
 //             mt="23px"
-//             fontFamily="Roboto"
 //             textAlign="center"
 //           >
 //             Protecting your groups is our top priority. Please confirm your

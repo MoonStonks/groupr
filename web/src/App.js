@@ -9,12 +9,13 @@ import JoinEvent from "./pages/joinEvent";
 import Groups from "./pages/groups";
 import GroupFormation from "./pages/group-formation";
 import { Test } from "pages/test";
+import theme from './theme';
 //  import { CalendarPage } from "./pages/CalendarPage";
 //  import { GroupSettings } from "./components/GroupSettings";
 
 export const App = () => {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={Home} />

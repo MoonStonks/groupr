@@ -84,13 +84,13 @@ export default function Filter() {
      
     >
       <VStack spacing="5px" alignItems="flex-start">
-        <Heading color="white" fontFamily="Roboto" fontSize="25" mb="12px">
+        <Heading color="white" fontSize="25" mb="12px">
           FILTERS
         </Heading>
 
         <HStack color="white">
           <BsTagFill />
-          <Heading color="white" fontFamily="Roboto" fontSize="16px">
+          <Heading color="white" fontSize="16px">
           SPECIALITIES
           </Heading>
         </HStack>
@@ -105,7 +105,7 @@ export default function Filter() {
         <Box >
         <HStack color="white" mt='10px'>
           <BsTagFill />
-          <Heading color="white" fontFamily="Roboto" fontSize="16px">
+          <Heading color="white" fontSize="16px">
             SKILLS
           </Heading>
         </HStack>

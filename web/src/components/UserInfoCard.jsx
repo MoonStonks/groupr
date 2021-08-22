@@ -46,6 +46,7 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 import {FiSettings} from "react-icons/fi"
+import SimpleTag from "./SimpleTag";
 
 export default chakra(function UserInfoCard({ className, user, cardColor }) {
     return (
@@ -59,10 +60,10 @@ export default chakra(function UserInfoCard({ className, user, cardColor }) {
                 src="https://bit.ly/dan-abramov"
                 boxSize="50px"
               />
-              <Heading size="sm">
+              <Heading size="xs">
                 {user.firstName} {user.lastName}
               </Heading>
-              <Tag>
+              <Tag fontSize='10px'>
                 <TagLeftIcon as={BsTagFill} />
                 {user.role}
               </Tag>
@@ -79,50 +80,36 @@ export default chakra(function UserInfoCard({ className, user, cardColor }) {
         </Box>
         <SimpleGrid columns={2} alignItems="flex-start" mt="10px">
           <Box>
-            <Heading size="sm" fontFamily="Roboto">
+            <Heading size="sm">
               SKILLS
             </Heading>
             <HStack spacing="5px" mt="5px">
               {user.skills.map((skill) => (
-                <Tag
-                  size="md"
-                  key="md"
-                  variant="solid"
-                  bg="#521F37"
-                  color="white"
-                  fontFamily="HK Grotesk"
-                >
+                <SimpleTag>
                   {skill}
-                </Tag>
+                </SimpleTag>
               ))}
             </HStack>
           </Box>
 
           <Box>
-            <Heading size="sm" fontFamily="Roboto">
+            <Heading size="sm">
               INTERESTS
             </Heading>
             <HStack spacing="5px" mt="5px">
               {user.interests.map((interest) => (
-                <Tag
-                  size="md"
-                  key="md"
-                  variant="solid"
-                  bg="#521F37"
-                  color="white"
-                  fontFamily="HK Grotesk"
-                >
+                <SimpleTag>
                   {interest}
-                </Tag>
+                </SimpleTag>
               ))}
             </HStack>
           </Box>
         </SimpleGrid>
         <Box mt="15px">
-          <Heading size="sm" fontFamily="Roboto">
+          <Heading size="sm">
             BIO
           </Heading>
-          <Text color="black">{user.userBio}</Text>
+          <Text color="black" fontSize='14px'>{user.userBio}</Text>
         </Box>
       </Box>
     </Box>

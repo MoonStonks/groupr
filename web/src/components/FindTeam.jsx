@@ -32,26 +32,55 @@ import {
   TagRightIcon,
   TagCloseButton,
   SimpleGrid,
+  useToast,
 } from "@chakra-ui/react";
 
 import Filter from "./Filter";
 import SearchBar from "./SearchBar";
 import UserInfoCard from "./UserInfoCard";
+import SimpleTag from "./SimpleTag";
 
 const listOfTeams = [
   {
     id: "123",
     avatarUrl: "string",
-    name: "team1",
+    name: "Team Toronto",
     createdByUserId: "string",
-    capacity: 9,
+    capacity: 3,
     eventId: "string",
-    skills: ["css", "java", " javascript", "html"],
+    skills: ["css", "javascript", "python"],
   },
   {
     id: "234",
     avatarUrl: "string",
-    name: "team2",
+    name: "Team Vancouver",
+    createdByUserId: "string",
+    capacity: 3,
+    eventId: "string",
+    skills: ["java", "C++"],
+  },
+  {
+    id: "235",
+    avatarUrl: "string",
+    name: "Team Montreal",
+    createdByUserId: "string",
+    capacity: 2,
+    eventId: "string",
+    skills: ["css", " javascript", "html"],
+  },
+  {
+    id: "346",
+    avatarUrl: "string",
+    name: "Team Beijing",
+    createdByUserId: "string",
+    capacity: 1,
+    eventId: "string",
+    skills: ["css", "java", " javascript", "html"],
+  },
+  {
+    id: "457",
+    avatarUrl: "string",
+    name: "Team Seoul",
     createdByUserId: "string",
     capacity: 9,
     eventId: "string",
@@ -137,32 +166,38 @@ export default function FindTeam() {
   return (
     <Box>
       <HStack>
-        <Heading color="white" fontFamily="Roboto" fontSize="80px">
+        <Heading color="white" fontSize="80px">
           Find a Team
         </Heading>
-        <Box w='130px'/>
+        <Box w="130px" />
         <SearchBar />
-        
       </HStack>
-      <Box ml="20px" mt='30px'>
-        <Flex w='100%'>
+      <Box ml="20px" mt="30px">
+        <Flex w="100%">
           <Filter />
-          <Box ml='35px' w='100%'>
-            <Heading size='md' color='white'>Recommended Teams</Heading>
-            <Flex w='100%'>  
-              <VStack alignItems="flex-start" >
+          <Box ml="35px" w="100%">
+            <Heading size="md" color="white">
+              Recommended Teams
+            </Heading>
+            <Flex w="100%">
+              <VStack alignItems="flex-start">
                 <SimpleGrid columns={1} gridRowGap="20px" mt="27px">
                   {listOfTeams.map((team) => (
                     <TeamCard
                       team={team}
                       handleTeamClick={handleTeamClick}
-                      cardColor={selectedTeamId === team.id ? "#F6DEAF" : "white"}
+                      cardColor={
+                        selectedTeamId === team.id ? "#F6DEAF" : "white"
+                      }
                     />
                   ))}
                 </SimpleGrid>
               </VStack>
-              <Spacer/>
-              {selectedTeamId && <GroupMembersInfo teamMembers={teamMembers} />}
+              <Box pl="40px">
+                {selectedTeamId && (
+                  <GroupMembersInfo teamMembers={teamMembers} />
+                )}
+              </Box>
             </Flex>
           </Box>
         </Flex>
@@ -185,23 +220,14 @@ const TeamCard = chakra(function ({
       bg={cardColor}
       rounded="5px"
       p="15px"
-      _hover={{cursor: 'pointer'}}
+      _hover={{ cursor: "pointer" }}
       onClick={() => handleTeamClick(team.id)}
     >
-      <Heading size="md">Team Marley</Heading>
-      <Text>Looking for 2 members with</Text>
+      <Heading size="md">{team.name}</Heading>
+      <Text>Looking for {team.capacity} members with</Text>
       <HStack spacing="5px">
         {team.skills.map((skill) => (
-          <Tag
-            size="md"
-            key="md"
-            variant="solid"
-            bg="#965171"
-            color="white"
-            fontFamily="HK Grotesk"
-          >
-            {skill}
-          </Tag>
+          <SimpleTag>{skill}</SimpleTag>
         ))}
       </HStack>
     </VStack>
@@ -209,10 +235,45 @@ const TeamCard = chakra(function ({
 });
 
 const GroupMembersInfo = chakra(function ({ className, teamMembers }) {
+  const toast = useToast();
   return (
-    <Box p="15px" bg="white" maxH='700px' overflowY='auto' rounded='5px'>
+    <Box
+      p="15px"
+      bg="white"
+      maxH="700px"
+      overflowY="auto"
+      css={{
+        "&::-webkit-scrollbar": {
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-track": {
+          background: "#3B3E3E",
+          width: "8px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          background: "#9BA09F",
+          opacity: "12",
+          borderRadius: "24px",
+        },
+      }}
+    >
       <VStack>
-        <Button colorScheme="yellow" bg="#F6DEAF" w="full" h='60px' mb='5px'>
+        <Button
+          colorScheme="yellow"
+          bg="#F6DEAF"
+          w="full"
+          h="60px"
+          mb="5px"
+          onClick={() =>
+            toast({
+              title: "Request Sent",
+              description: `Successfully sent request to join.`,
+              status: "success",
+              duration: 9000,
+              isClosable: true,
+            })
+          }
+        >
           Request to Join
         </Button>
         {teamMembers.map((member) => (

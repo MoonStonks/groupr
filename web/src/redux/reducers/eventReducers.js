@@ -5,6 +5,7 @@ import {
   SET_CURRENT_EVENT,
   FETCHING_EVENT_MEMBERS,
   SET_EVENT_MEMBERS,
+  SET_NEW_EVENT,
   FETCHING_EVENT_MEMBERS_FAILED,
 } from "redux/actions/eventActions";
 
@@ -19,6 +20,11 @@ export default (state = {}, action) => {
       return {
         ...state,
         selectedEvent: action.payload,
+      };
+    case SET_NEW_EVENT:
+      return {
+        ...state,
+        newEvent: action.payload,
       };
     case FETCHING_EVENT_MEMBERS:
       return {
