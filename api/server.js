@@ -1,9 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 const {
   createEvent,
   getAllEvents,
   registerUserInEvent,
   getEventsByUserId,
+  getEventMembers,
 } = require("./models/events");
 const {
   getTeams,
@@ -17,7 +19,9 @@ const { modifyUserTeam } = require("./models/userTeams");
 require("dotenv").config();
 const app = express();
 const port = 5000;
+
 app.use(express.json());
+app.use(cors());
 
 app.get("/", async (req, res) => {
   res.status(200).send("ok");
@@ -48,6 +52,17 @@ app.get("/users", async (req, res) => {
  * firstName: string
  * lastName: string
  * email: string
+ * avatarUrl: string
+ * skills: Array<string>
+ * interest: Array<string>
+ * role: string
+ * socials: Object<{
+ *    twitter: string or null
+ *    facebook: string or null
+ *    whatsapp: string or null
+ *    github: string or null
+ *    linkedin: string or null
+ * }>
  */
 app.post("/users", async (req, res) => {
   try {
@@ -110,7 +125,7 @@ app.get("/teams/:eventid", async (req, res) => {
   }
 });
 
-// GET: Teams by event ID
+// GET: Members of team by team ID
 app.get("/teams/:teamid/members", async (req, res) => {
   try {
     const members = await getTeamMembers(req.params.teamid);
@@ -157,11 +172,22 @@ app.get("/events/:userid", async (req, res) => {
   }
 });
 
+// GET: Events by User ID
+app.get("/events/:eventid/members", async (req, res) => {
+  try {
+    const members = await getEventMembers(req.params.eventid);
+    res.status(200).send(members);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 /**
  * POST: Create team
  *
  * name: string
  * maxTeamSize: integer
+ * avatarUrl: string
  */
 app.post("/events/create", async (req, res) => {
   try {

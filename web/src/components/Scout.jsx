@@ -44,6 +44,8 @@ import {
 import { FaWhatsapp } from "react-icons/fa";
 import { MdAdd } from "react-icons/md";
 
+import Filter from './Filter'
+
 const teamMembers = [
   {
     id: "1",
@@ -105,22 +107,17 @@ const teamMembers = [
   },
 ];
 
-/**
- * This component is for a user info box containing user info such as
- * skills, name, about, interests, what they are looking for, status,
- * current role  position
- */
-
 export default function Scout() {
   return (
     <Box>
       <Heading color="white" fontFamily="Roboto" fontSize="80px">
         Scount Individuals
       </Heading>
-      <SimpleGrid columns={{ lg: 2, base: 1 }} gridGap="20px" mt="45px">
-        {/* {teamMembers.map((member) => (
+      <Filter/>
+      <SimpleGrid columns={1} gridGap="20px" mt="45px">
+        {teamMembers.map((member) => (
           <MemberCard member={member} />
-        ))} */}
+        ))}
       </SimpleGrid>
     </Box>
   );
@@ -128,82 +125,92 @@ export default function Scout() {
 
 const MemberCard = chakra(function ({ member, className }) {
   return (
+
     <Box backgroundColor="white" rounded="5px">
       <Box p="15px">
         <Box borderBottom="1px solid black">
           <SimpleGrid columns={2}>
-            <HStack h="72px" spacing="20px">
-              <Avatar
-                name="Dan Abrahmov"
-                src="https://bit.ly/dan-abramov"
-                boxSize="50px"
-              />
-              <Heading size="sm">
-                {member.firstName} {member.lastName}
-              </Heading>
-              <Tag>
-                <TagLeftIcon as={BsTagFill} />
-                {member.role}
-              </Tag>
-            </HStack>
-            <HStack spacing="8px">
-              <GrTwitter />
-              <GrFacebook />
-              <GrInstagram />
-              <GrGithub />
-              <GrLinkedin />
-              <FaWhatsapp />
-            </HStack>
+            <SimpleGrid columns={2}>
+              <HStack h="72px" >
+                <Avatar
+                  name="Dan Abrahmov"
+                  src="https://bit.ly/dan-abramov"
+                  boxSize="50px"
+                />
+                <Heading size="sm">
+                  {member.firstName} {member.lastName}
+                </Heading>
+                <Tag>
+                  <TagLeftIcon as={BsTagFill} />
+                  {member.role}
+                </Tag>
+              </HStack>
+              <HStack spacing="8px">
+                <GrTwitter />
+                <GrFacebook />
+                <GrInstagram />
+                <GrGithub />
+                <GrLinkedin />
+                <FaWhatsapp />
+              </HStack>
+            </SimpleGrid>
+            <Flex justifyContent='flex-end'>
+            <Button colorScheme='green' maxW='90px' bg='#6BA709' >
+              Invite
+            </Button>
+            </Flex>
           </SimpleGrid>
         </Box>
-        <SimpleGrid columns={2} alignItems="flex-start" mt="10px">
-          <Box>
-            <Heading size="sm" fontFamily="Roboto">
-              SKILLS
-            </Heading>
-            <HStack spacing="5px" mt="5px">
-              {member.skills.map((skill) => (
-                <Tag
-                  size="md"
-                  key="md"
-                  variant="solid"
-                  bg="#FCA5A5"
-                  color="black"
-                  fontFamily="HK Grotesk"
-                >
-                  {skill}
-                </Tag>
-              ))}
-            </HStack>
-          </Box>
+        <SimpleGrid columns={2}>
+          <SimpleGrid columns={2} alignItems="flex-start" mt="10px">
+            <Box>
+              <Heading size="sm" fontFamily="Roboto">
+                SKILLS
+              </Heading>
+              <HStack spacing="5px" mt="5px">
+                {member.skills.map((skill) => (
+                  <Tag
+                    size="md"
+                    key="md"
+                    variant="solid"
+                    bg="#FCA5A5"
+                    color="black"
+                    fontFamily="HK Grotesk"
+                  >
+                    {skill}
+                  </Tag>
+                ))}
+              </HStack>
+            </Box>
 
-          <Box>
+            <Box>
+              <Heading size="sm" fontFamily="Roboto">
+                INTERESTS
+              </Heading>
+              <HStack spacing="5px" mt="5px">
+                {member.interests.map((interest) => (
+                  <Tag
+                    size="md"
+                    key="md"
+                    variant="solid"
+                    bg="#FCA5A5"
+                    color="black"
+                    fontFamily="HK Grotesk"
+                  >
+                    {interest}
+                  </Tag>
+                ))}
+              </HStack>
+            </Box>
+          </SimpleGrid>
+          <Box mt="15px">
             <Heading size="sm" fontFamily="Roboto">
-              INTERESTS
+              BIO
             </Heading>
-            <HStack spacing="5px" mt="5px">
-              {member.interests.map((interest) => (
-                <Tag
-                  size="md"
-                  key="md"
-                  variant="solid"
-                  bg="#FCA5A5"
-                  color="black"
-                  fontFamily="HK Grotesk"
-                >
-                  {interest}
-                </Tag>
-              ))}
-            </HStack>
+            <Text color="black">{member.userBio}</Text>
           </Box>
         </SimpleGrid>
-        <Box mt="15px">
-          <Heading size="sm" fontFamily="Roboto">
-            BIO
-          </Heading>
-          <Text color="black">{member.userBio}</Text>
-        </Box>
       </Box>
     </Box>
-  );
+    );
 });

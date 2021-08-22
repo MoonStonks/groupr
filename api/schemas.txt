@@ -14,7 +14,7 @@ User {
     github: string or null,
     linkedin: string or null
   }>
-userBio: string,
+  userBio: string,
 }
 
 Team {

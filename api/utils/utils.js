@@ -41,6 +41,13 @@ const queryFirestoreWithBuckets = async (ref, property, table) => {
   return resultList;
 };
 
+const generateRandomString = (length, randomString = "") => {
+  randomString += Math.random().toString(20).substr(2, length);
+  if (randomString.length > length) return randomString.slice(0, length);
+  return generateRandomString(length, randomString);
+};
+
 module.exports = {
   queryFirestoreWithBuckets,
+  generateRandomString,
 };

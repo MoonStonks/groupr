@@ -12,16 +12,18 @@ const getTeams = async () => {
   return teams;
 };
 
-const createTeam = async ({ name, userId, eventId }) => {
+const createTeam = async ({ name, userId, eventId, avatarUrl = "" }) => {
   if (await isUserRegisteredInEvent(userId, eventId)) {
     const docRef = await db.collection("Teams").add({
       name,
       createdByUserId: userId,
       capacity: await getEventMaxTeamSize(eventId),
       eventId,
+      avatarUrl,
     });
     const doc = await docRef.get();
-    await modifyUserTeam(userId, {
+    await modifyUserTeam({
+      userId,
       teamId: doc.id,
       eventId: eventId,
     });

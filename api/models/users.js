@@ -6,6 +6,7 @@ const createUser = async ({
   lastName,
   skills = [],
   interests = [],
+  avatarUrl = ""
 }) => {
   const docRef = await db.collection("Users").add({
     firstName,
@@ -13,6 +14,7 @@ const createUser = async ({
     email,
     skills,
     interests,
+    avatarUrl,
   });
   const doc = await docRef.get();
   if (!doc.exists) {

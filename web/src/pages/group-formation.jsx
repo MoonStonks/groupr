@@ -134,10 +134,10 @@ const GroupFormation = () => {
               aria-label={`${event.name} tooltip`}
               placement="right"
             >
-              <Flex justifyContent="flex-start" w="100%" mb="5px">
+              <Flex justifyContent="flex-start" w="100%" mb="5px" >
                 <Box
                   bg="green.600"
-                  h="100%"
+                  h="60px"
                   w="10px"
                   rounded="5px"
                   mr="10px"
@@ -199,18 +199,6 @@ const GroupFormation = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
-
-          <Spacer />
-          <Button
-            alignSelf="flex-start"
-            aria-label="settings"
-            bg="null"
-            boxSize="50px"
-            colorScheme="teal"
-            variant="ghost"
-          >
-            <Icon boxSize="40px" color="gray.200" as={FiSettings} />
-          </Button>
         </HStack>
       </Box>
     </Flex>
@@ -222,6 +210,7 @@ const StyledTab = chakra(function ({ className, children, isDisabled }) {
     <Tab
       className={className}
       borderBottomColor="transparent"
+      px='30px'
       _selected={{
         borderColor: "white",
         textColor: "white",

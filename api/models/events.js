@@ -1,5 +1,8 @@
 const { db } = require("../config/firestore");
-const { queryFirestoreWithBuckets } = require("../utils/utils");
+const {
+  queryFirestoreWithBuckets,
+  generateRandomString,
+} = require("../utils/utils");
 const { addUserToUserTeams } = require("./userTeams");
 
 const getAllEvents = async () => {
@@ -16,10 +19,12 @@ const getEventsByUserId = async (id) => {
   return await queryFirestoreWithBuckets(ref, "eventId", "Events");
 };
 
-const createEvent = async ({ name, maxTeamSize }) => {
+const createEvent = async ({ name, maxTeamSize, avatarUrl = "" }) => {
   const docRef = await db.collection("Events").add({
     name,
     maxTeamSize,
+    avatarUrl,
+    inviteCode: generateRandomString(6),
   });
   const doc = await docRef.get();
   if (!doc.exists) {
@@ -29,10 +34,22 @@ const createEvent = async ({ name, maxTeamSize }) => {
   }
 };
 
-const registerUserInEvent = async (body) => await addUserToUserTeams(body);
+const registerUserInEvent = async ({ inviteCode, ...body }) => {
+  const eventRef = await db
+    .collection("Events")
+    .where("inviteCode", "==", inviteCode);
+  await addUserToUserTeams(body);
+};
 
 const getEventMaxTeamSize = async (eventId) => {
-  return 4;
+  const docRef = db.collection("Events").doc(eventId);
+  const doc = await docRef.get();
+  return doc.data().maxTeamSize;
+};
+
+const getEventMembers = async (eventId) => {
+  const ref = db.collection("UserTeams").where("eventId", "==", eventId);
+  return await queryFirestoreWithBuckets(ref, "userId", "Users");
 };
 
 module.exports = {
@@ -41,4 +58,5 @@ module.exports = {
   createEvent,
   registerUserInEvent,
   getEventMaxTeamSize,
+  getEventMembers,
 };
