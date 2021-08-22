@@ -46,7 +46,7 @@ const GroupFormation = () => {
     // @ts-ignore
   } = useSelector((state) => state.users);
   // @ts-ignore
-  const { selectedEvent } = useSelector((state) => state.events);
+  const eventState = useSelector((state) => state.events);
   let history = useHistory();
   const dataLoader = useDataLoader();
   const dispatch = useDispatch();
@@ -55,7 +55,24 @@ const GroupFormation = () => {
     if (!currentUser && !fetchingUser && !fetchingEvents) {
       dataLoader();
     }
-  }, [currentUser, dataLoader, fetchingUser, fetchingEvents]);
+
+    if (
+      currentUser &&
+      !fetchingUser &&
+      !fetchingEvents &&
+      !eventState.selectedEvent
+    ) {
+      dispatch(getEvent(events[0].id));
+    }
+  }, [
+    currentUser,
+    dataLoader,
+    fetchingUser,
+    fetchingEvents,
+    eventState,
+    dispatch,
+    events,
+  ]);
 
   const handleLogout = async () => {
     await firebase.auth().signOut();
@@ -78,9 +95,8 @@ const GroupFormation = () => {
             size="60px"
             bg="#D16767"
             mt="30px"
-            transition='0.2s ease'
-            _hover={{cursor: 'pointer', transform: 'scale(1.05)',
-        }}
+            transition="0.2s ease"
+            _hover={{ cursor: "pointer", transform: "scale(1.05)" }}
             onClick={() => history.push(`/group-formation`)}
           >
             <Icon boxSize="40px" color="black" as={MdPersonOutline} />
@@ -122,14 +138,16 @@ const GroupFormation = () => {
                   rounded="5px"
                   mr="10px"
                   visibility={
-                    selectedEvent?.id === event.id ? "visible" : "hidden"
+                    eventState?.selectedEvent?.id === event.id
+                      ? "visible"
+                      : "hidden"
                   }
                 />
                 <Avatar
-                  _hover={{ cursor: "pointer", transform: 'scale(1.05)' }}
-                  transition='0.2s ease'
+                  _hover={{ cursor: "pointer", transform: "scale(1.05)" }}
+                  transition="0.2s ease"
                   size="lg"
-                  my='5px'
+                  my="5px"
                   src={event.avatarUrl}
                   name={event.name}
                   onClick={() => {
@@ -143,8 +161,12 @@ const GroupFormation = () => {
 
         <Spacer />
         <VStack>
-          <Circle size="60px" bg="#1F523A" transition='0.2s ease' _hover={{cursor: 'pointer', transform: 'scale(1.05)', 
-        }}>
+          <Circle
+            size="60px"
+            bg="#1F523A"
+            transition="0.2s ease"
+            _hover={{ cursor: "pointer", transform: "scale(1.05)" }}
+          >
             <Icon
               color="white"
               boxSize="40px"
@@ -152,8 +174,12 @@ const GroupFormation = () => {
               onClick={() => history.push(`/join`)}
             />
           </Circle>
-          <Circle size="60px" bg="#1F523A" transition='0.2s ease' _hover={{cursor: 'pointer', transform: 'scale(1.05)',
-        }}>
+          <Circle
+            size="60px"
+            bg="#1F523A"
+            transition="0.2s ease"
+            _hover={{ cursor: "pointer", transform: "scale(1.05)" }}
+          >
             <Icon
               color="white"
               boxSize="40px"
@@ -184,20 +210,20 @@ const GroupFormation = () => {
       >
         <Tabs isLazy ml="20px" w="100%" h="100%" pt="30px" pr="30px">
           <TabList textColor="gray.100" maxW="600px" borderColor="transparent">
-            <StyledTab>Your Team</StyledTab>
             <StyledTab>Find a Team</StyledTab>
             <StyledTab>Scout Individuals</StyledTab>
+            <StyledTab>Your Team</StyledTab>
           </TabList>
 
           <TabPanels>
-            <TabPanel>
-              <YourTeam />
-            </TabPanel>
             <TabPanel>
               <FindTeam />
             </TabPanel>
             <TabPanel>
               <Scout />
+            </TabPanel>
+            <TabPanel>
+              <YourTeam />
             </TabPanel>
           </TabPanels>
         </Tabs>

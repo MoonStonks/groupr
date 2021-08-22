@@ -124,7 +124,7 @@ const teamMembers = [
   },
   {
     id: "2",
-    avatarUrl: "https://bit.ly/dan-abramov",
+    avatarUrl: "https://bit.ly/code-beast",
     firstName: "Tom",
     lastName: "Riddle",
     email: "iamVOLDEMORT@helloworld.com",
@@ -144,7 +144,7 @@ const teamMembers = [
   ,
   {
     id: "3",
-    avatarUrl: "https://bit.ly/dan-abramov",
+    avatarUrl: "https://bit.ly/prosper-baba",
     firstName: "Harry",
     lastName: "Potter",
     email: "numWanQuiditch@helloworld.com",

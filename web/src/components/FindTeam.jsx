@@ -39,6 +39,7 @@ import Filter from "./Filter";
 import SearchBar from "./SearchBar";
 import UserInfoCard from "./UserInfoCard";
 import SimpleTag from "./SimpleTag";
+import { useSelector } from "react-redux";
 
 const listOfTeams = [
   {
@@ -110,7 +111,7 @@ const teamMembers = [
   },
   {
     id: "2",
-    avatarUrl: "https://bit.ly/dan-abramov",
+    avatarUrl: "https://bit.ly/prosper-baba",
     firstName: "Tom",
     lastName: "Riddle",
     email: "iamVOLDEMORT@helloworld.com",
@@ -130,7 +131,7 @@ const teamMembers = [
   ,
   {
     id: "3",
-    avatarUrl: "https://bit.ly/dan-abramov",
+    avatarUrl: "https://bit.ly/tioluwani-kolawole",
     firstName: "Harry",
     lastName: "Potter",
     email: "numWanQuiditch@helloworld.com",
@@ -157,6 +158,8 @@ const teamMembers = [
 
 export default function FindTeam() {
   const [selectedTeamId, setSelectedTeamId] = useState(null);
+  // @ts-ignore
+  const { selectedEvent } = useSelector((state) => state.events);
 
   const handleTeamClick = (teamId) => {
     console.log(teamId + " Clicked");
@@ -182,15 +185,16 @@ export default function FindTeam() {
             <Flex w="100%">
               <VStack alignItems="flex-start">
                 <SimpleGrid columns={1} gridRowGap="20px" mt="27px">
-                  {listOfTeams.map((team) => (
-                    <TeamCard
-                      team={team}
-                      handleTeamClick={handleTeamClick}
-                      cardColor={
-                        selectedTeamId === team.id ? "#F6DEAF" : "white"
-                      }
-                    />
-                  ))}
+                  {selectedEvent?.name === "Groupr" &&
+                    listOfTeams.map((team) => (
+                      <TeamCard
+                        team={team}
+                        handleTeamClick={handleTeamClick}
+                        cardColor={
+                          selectedTeamId === team.id ? "#F6DEAF" : "white"
+                        }
+                      />
+                    ))}
                 </SimpleGrid>
               </VStack>
               <Box pl="40px">

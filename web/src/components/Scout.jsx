@@ -143,7 +143,7 @@ const MemberCard = chakra(function ({ member, className }) {
               <HStack h="72px">
                 <Avatar
                   name="Dan Abrahmov"
-                  src="https://bit.ly/dan-abramov"
+                  src={member.avatarUrl}
                   boxSize="50px"
                 />
                 <Heading size="xs">

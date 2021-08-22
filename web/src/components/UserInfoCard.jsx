@@ -57,7 +57,7 @@ export default chakra(function UserInfoCard({ className, user, cardColor }) {
             <HStack h="72px">
               <Avatar
                 name="Dan Abrahmov"
-                src="https://bit.ly/dan-abramov"
+                src={user.avatarUrl}
                 boxSize="50px"
               />
               <Heading size="xs">
